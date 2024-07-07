@@ -21,18 +21,33 @@ class Cell:
     # Calls on the Window class' draw_line function from graphics; win is passed in as a variable
     # so it works in main
     def draw(self, x1, y1, x2, y2):
-        if self.has_left_wall is True:
-            left_wall = Line(Point(x1, y1), Point(x1, y2))
+        if self._win is None:
+            return
+        
+        left_wall = Line(Point(x1, y1), Point(x1, y2))
+        right_wall = Line(Point(x2, y1), Point(x2, y2))
+        top_wall = Line(Point(x1, y1), Point(x2, y1))
+        bottom_wall = Line(Point(x1, y2), Point(x2, y2))
+
+        if self.has_left_wall:
             self._win.draw_line(left_wall)
-        if self.has_right_wall is True:
-            right_wall = Line(Point(x2, y1), Point(x2, y2))
+        else:
+            self._win.draw_line(left_wall, "white")
+
+        if self.has_right_wall:
             self._win.draw_line(right_wall)
-        if self.has_top_wall is True:
-            top_wall = Line(Point(x1, y1), Point(x2, y1))
+        else:
+            self._win.draw_line(right_wall, "white")
+
+        if self.has_top_wall:
             self._win.draw_line(top_wall)
-        if self.has_bottom_wall is True:
-            bottom_wall = Line(Point(x1, y2), Point(x2, y2))
+        else:
+            self._win.draw_line(top_wall, "white")
+
+        if self.has_bottom_wall:
             self._win.draw_line(bottom_wall)
+        else:
+            self._win.draw_line(bottom_wall, "white")
 
     # Next, we need a way to draw a path between 2 cells. It should draw a line from the center of one cell to another
     # Using integer division here, we don't need it to be super exact

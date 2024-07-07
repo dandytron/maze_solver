@@ -22,6 +22,7 @@ class Maze:
         self._cells = []
 
         self._create_cells()
+        self._break_entrance_and_exit()
     
     # This method should fill a self._cells list with lists of cells. 
     # Each top-level list is a column of Cell objects. Once the matrix is 
@@ -37,6 +38,7 @@ class Maze:
         for i in range(self._num_cols):
             for j in range(self._num_rows):
                 self._draw_cell(i, j)
+
 
     # This method should calculate the x/y position of the Cell based on i, j, the cell_size,
     #  and the x/y position of the Maze itself. The x/y position of the maze represents 
@@ -61,3 +63,10 @@ class Maze:
             return
         self._win.redraw()
         time.sleep(0.05)
+
+    def _break_entrance_and_exit(self):
+        self._cells[0][0].has_top_wall = False
+        self._draw_cell(0, 0)
+
+        self._cells[self._num_cols - 1][self._num_rows - 1].has_bottom_wall = False
+        self._draw_cell(self._num_cols - 1, self._num_rows - 1)
