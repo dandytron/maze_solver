@@ -33,3 +33,4 @@ class Cell:
         if self.has_bottom_wall is True:
             bottom_wall = Line(Point(x1, y2), Point(x2, y2))
             self._win.draw_line(bottom_wall)
+
