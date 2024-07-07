@@ -1,6 +1,7 @@
 from cell import Cell
 from graphics import Window
 import time
+import random
 
 class Maze:
     def __init__(self,
@@ -11,6 +12,7 @@ class Maze:
                  cell_size_x,
                  cell_size_y,
                  win=None,
+                 seed=None
                  ):
         self._x1 = x1
         self._y1 = y1
@@ -20,6 +22,9 @@ class Maze:
         self._cell_size_y = cell_size_y
         self._win = win
         self._cells = []
+
+        if seed is not None:
+            random.seed(seed)
 
         self._create_cells()
         self._break_entrance_and_exit()
@@ -70,3 +75,56 @@ class Maze:
 
         self._cells[self._num_cols - 1][self._num_rows - 1].has_bottom_wall = False
         self._draw_cell(self._num_cols - 1, self._num_rows - 1)
+
+
+    # The recursive break_walls_r method is a depth-first traversal through the cells, breaking down walls as it goes. 
+
+    def _break_walls_r(self, i, j):
+        self._cells[i][j].visited = True
+
+        while True:
+            to_visit_list = []
+
+            # figure out which cells should be visited
+            # left
+            if i > 0 and not self._cells[i - 1][j].visited:
+                to_visit_list.append(i - 1, j)
+            # right
+            if i < self._num_cols - 1 and not self._cells[i + 1][j].visited:
+                to_visit_list.append(i + 1, j)
+            # top
+            if j > 0 and not self._cells[i][j - 1].visited:
+                to_visit_list.append(i, j - 1)
+            # bottom
+            if j < self._num_rows - 1 and not self._cells[i][j + 1].visited:
+                to_visit_list.append(i, j + 1)
+
+            # if nowhere to go, break out
+            if len(to_visit_list) == 0:
+                self._draw_cell(i, j)
+                return
+            
+            # otherwise, pick a random direction to go. This retrieves a TUPLE from the list
+            next_direction_index = random.randrange(0, len(to_visit_list))
+            next_index = to_visit_list[next_direction_index]
+
+            # Knock down the walls between the current cell and the chosen cell.
+            # right
+            if next_index[0] == i + 1:
+                self._cells[i][j].has_right_wall = False
+                self._cells[i + 1][j].has_left_wall = False
+            # left
+            if next_index[0] == i - 1:
+                self._cells[i][j].has_left_wall = False
+                self._cells[i - 1][j].has_right_wall = False
+            # down
+            if next_index[1] == j + 1:
+                self._cells[i][j].has_bottom_wall = False
+                self._cells[i][j + 1].has_top_wall = False
+            # up
+            if next_index[1] == j - 1:
+                self._cells[i][j].has_top_wall = False
+                self._cells[i][j - 1].has_bottom_wall = False
+
+            # recursively visit the next cell
+            self._break_walls_r(next_index[0], next_index[1])

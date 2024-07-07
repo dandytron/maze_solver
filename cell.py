@@ -17,6 +17,9 @@ class Cell:
         self._x2 = None
         self._y2 = None
         self._win = win
+
+        # this data member tracks whether the cell is visited, a form of depth-first traversal
+        self.visited = False
     
     # Calls on the Window class' draw_line function from graphics; win is passed in as a variable
     # so it works in main
