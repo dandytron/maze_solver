@@ -28,6 +28,8 @@ class Maze:
 
         self._create_cells()
         self._break_entrance_and_exit()
+        self._break_walls_r(0, 0)
+        self._reset_cells_visited()
     
     # This method should fill a self._cells list with lists of cells. 
     # Each top-level list is a column of Cell objects. Once the matrix is 
@@ -88,16 +90,16 @@ class Maze:
             # figure out which cells should be visited
             # left
             if i > 0 and not self._cells[i - 1][j].visited:
-                to_visit_list.append(i - 1, j)
+                to_visit_list.append((i - 1, j))
             # right
             if i < self._num_cols - 1 and not self._cells[i + 1][j].visited:
-                to_visit_list.append(i + 1, j)
+                to_visit_list.append((i + 1, j))
             # top
             if j > 0 and not self._cells[i][j - 1].visited:
-                to_visit_list.append(i, j - 1)
+                to_visit_list.append((i, j - 1))
             # bottom
             if j < self._num_rows - 1 and not self._cells[i][j + 1].visited:
-                to_visit_list.append(i, j + 1)
+                to_visit_list.append((i, j + 1))
 
             # if nowhere to go, break out
             if len(to_visit_list) == 0:
@@ -128,3 +130,12 @@ class Maze:
 
             # recursively visit the next cell
             self._break_walls_r(next_index[0], next_index[1])
+
+
+    # simply reset the visited property of all the cells in the Maze to False. 
+    # Call it after _break_walls_r so we can reuse the visited property when solving the maze
+    
+    def _reset_cells_visited(self):
+        for column in self._cells:
+            for cell in column:
+                cell.visited = False
