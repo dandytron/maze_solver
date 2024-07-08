@@ -27,6 +27,11 @@ class Cell:
         if self._win is None:
             return
         
+        self._x1 = x1
+        self._x2 = x2
+        self._y1 = y1
+        self._y2 = y2   
+
         left_wall = Line(Point(x1, y1), Point(x1, y2))
         right_wall = Line(Point(x2, y1), Point(x2, y2))
         top_wall = Line(Point(x1, y1), Point(x2, y1))
